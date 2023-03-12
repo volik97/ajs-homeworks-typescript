@@ -12,27 +12,15 @@ export default class Cart {
     }
 
     totalCost(): number {
-        let sum: number = 0;
-        for (let item of this._items) {
-            if (item.price) {
-                sum += item.price;
-            }
-        }
-        return sum
-    }
-    
-    totalCostDiscounted(discount: number): number{
-        let sum: number = 0;
-        for (let item of this._items) {
-            if (item.price) {
-                sum += item.price;
-            }
-        }
-        return sum - ((sum*discount)/100)
+        return this._items.reduce((acc, item) => item.price? acc + item.price : acc, 0)
     }
 
-    deletedItem(id: number): void{
-        const idx = this._items.findIndex(item => item.id == id)
-        this._items.splice(idx, 1)
+    totalCostDiscounted(discount: number): number {
+        const sum: number = this.totalCost()
+        return sum - ((sum * discount) / 100)
+    }
+
+    deletedItem(id: number): void {
+        this._items = this._items.filter((item: Buyable) => item.id !== id)
     }
 }
